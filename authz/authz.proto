@@ -1,0 +1,65 @@
+syntax = "proto3";
+package authz;
+
+option go_package = "github.com/es-hs/erpc/authz";
+
+// The service definition.
+service AuthzRPC {
+    rpc CheckPermission (CheckPermissionRequest) returns (CheckPermissionResult)  {}
+    rpc AddRoleToDomain (AddRoleToDomainRequest) returns (AddRoleToDomainResult)  {}
+    rpc GetRolesInDomain (GetRolesInDomainRequest) returns (GetRolesInDomainResult)  {}
+    rpc GetImplicitRolesInDomain (GetImplicitRolesInDomainRequest) returns (GetImplicitRolesInDomainResult)  {}
+    rpc GenerateOwnerRole(GenerateOwnerRoleRequest ) returns (GenerateOwnerRoleResult){}
+}
+
+message CheckPermissionRequest {
+    int64 user_id = 1;
+    int64 shop_id = 2;
+    string act = 3;
+}
+
+message CheckPermissionResult {
+    bool result = 1;
+    int32 code = 2;
+}
+
+message AddRoleToDomainRequest {
+    int64 user_id = 1;
+    int64 shop_id = 2;
+    string act = 3;
+}
+
+message AddRoleToDomainResult {
+    bool result = 1;
+    int32 code = 2;
+}
+
+message GetRolesInDomainRequest {
+    int64 user_id = 1;
+    int64 shop_id = 2;
+}
+
+message GetRolesInDomainResult {
+    repeated string roles = 1;
+    int32 code = 2;
+}
+
+
+message GetImplicitRolesInDomainRequest {
+    int64 user_id = 1;
+    int64 shop_id = 2;
+}
+
+message GetImplicitRolesInDomainResult {
+    repeated string roles = 1;
+    int32 code = 2;
+}
+
+message GenerateOwnerRoleRequest {
+    int64 user_id = 1;
+    int64 shop_id = 2;
+}
+
+message GenerateOwnerRoleResult {
+    int32 code = 1;
+}

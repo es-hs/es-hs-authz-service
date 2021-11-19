@@ -1,0 +1,34 @@
+version: "3.4"
+
+services:
+  es-hs-authz:
+    container_name: authz_service
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+      args:
+        - GRPC_PORT=${GRPC_PORT}
+        - REDIS_URL=${REDIS_URL}
+    working_dir: /app
+    volumes:
+      # - ../:/app
+      - pgdata:/var/lib/postgresql/data
+      - pgbackups:/pgbackups
+    env_file:
+      - .env
+    ports:
+      - 50051:50051
+    depends_on:
+      - redis
+  redis:
+    container_name: redis_authz_service
+    image: redis:latest
+    ports:
+      - 63791:6379
+volumes:
+  pgdata:
+  pgbackups:
+
+networks:
+  default:
+    name: es-hs
