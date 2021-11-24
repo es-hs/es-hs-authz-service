@@ -11,6 +11,7 @@ import (
 	authRPC "authz-service/modules/authz/handlers/rpc"
 	"authz-service/package/casbinhelper"
 
+	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
 )
@@ -63,5 +64,10 @@ func runServer() {
 	log.Info().Msgf("Server listening at %v", lis.Addr())
 	if err := s.Serve(lis); err != nil {
 		log.Fatal().Msgf("Failed to serve: %v", err)
+	}
+	r := gin.Default()
+
+	if err := r.Run(); err != nil {
+		log.Fatal().Msgf("Failed to serve http: %v", err)
 	}
 }

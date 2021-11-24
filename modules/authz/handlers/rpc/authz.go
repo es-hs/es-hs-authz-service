@@ -5,7 +5,7 @@ import (
 	"authz-service/package/casbinhelper"
 	"context"
 
-	pb "authz-service/authz"
+	pb "github.com/es-hs/erpc/authz"
 
 	"google.golang.org/grpc"
 )
@@ -87,4 +87,47 @@ func (instance *AuthzRpcServer) GenerateOwnerRole(ctx context.Context, request *
 		Code: 0,
 	}, nil
 
+}
+
+func (instance *AuthzRpcServer) AddRolesForUserToDomain(ctx context.Context, request *pb.AddRolesForUserToDomainRequest) (*pb.AddRolesForUserToDomainResult, error) {
+	userID := request.GetUserId()
+	shopID := request.GetShopId()
+	roles := request.GetAct()
+	result, err := instance.usecase.AddRolesForUserToDomain(uint(userID), roles, uint(shopID))
+	if err != nil {
+		return nil, err
+	}
+	return &pb.AddRolesForUserToDomainResult{
+		Result: result,
+		Code:   0,
+	}, nil
+
+}
+
+func (instance *AuthzRpcServer) RemoveRolesFromDomain(ctx context.Context, request *pb.RemoveRolesFromDomainRequest) (*pb.RemoveRolesFromDomainResult, error) {
+	userID := request.GetUserId()
+	shopID := request.GetShopId()
+	roles := request.GetAct()
+	result, err := instance.usecase.RemoveRolesFromUser(uint(userID), roles, uint(shopID))
+	if err != nil {
+		return nil, err
+	}
+	return &pb.RemoveRolesFromDomainResult{
+		Result: result,
+		Code:   0,
+	}, nil
+}
+
+func (instance *AuthzRpcServer) RemoveRoleFromDomain(ctx context.Context, request *pb.RemoveRoleFromDomainRequest) (*pb.RemoveRoleFromDomainResult, error) {
+	userID := request.GetUserId()
+	shopID := request.GetShopId()
+	role := request.GetAct()
+	result, err := instance.usecase.RemoveRoleFromUser(uint(userID), role, uint(shopID))
+	if err != nil {
+		return nil, err
+	}
+	return &pb.RemoveRoleFromDomainResult{
+		Result: result,
+		Code:   0,
+	}, nil
 }

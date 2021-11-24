@@ -50,6 +50,39 @@ func (a *Auth) AddRoleForUserToDomain(userID uint, role string, shopID uint) (re
 	return a.AddRoleToDomain(sub, role, domain)
 }
 
+func (a *Auth) AddRolesForUserToDomain(userID uint, roles []string, shopID uint) (result bool, err error) {
+	sub := fmt.Sprintf("user_%s", strconv.Itoa(int(userID)))
+	domain := fmt.Sprintf("shop_%s", strconv.Itoa(int(shopID)))
+	return a.AddRolesToDomain(sub, roles, domain)
+}
+
+func (a *Auth) RemoveRoleFromUser(userID uint, role string, shopID uint) (result bool, err error) {
+	sub := fmt.Sprintf("user_%s", strconv.Itoa(int(userID)))
+	domain := fmt.Sprintf("shop_%s", strconv.Itoa(int(shopID)))
+	//
+	e := a.enforcer
+	return e.RemoveNamedGroupingPolicy("g", sub, role, domain)
+
+	// return a.RemoveRoleFromUser(sub, role, domain)
+}
+
+func (a *Auth) RemoveRolesFromUser(userID uint, roles []string, shopID uint) (result bool, err error) {
+	sub := fmt.Sprintf("user_%s", strconv.Itoa(int(userID)))
+	domain := fmt.Sprintf("shop_%s", strconv.Itoa(int(shopID)))
+	//
+	e := a.enforcer
+	rolesToRemove := [][]string{}
+	for k := range roles {
+		// if _, ok := mapScope[roles[k]]; !ok {
+		// 	return false, errors.New("Role not found in scope")
+		// }
+		rolesToRemove = append(rolesToRemove, []string{sub, roles[k], domain})
+	}
+	return e.RemoveNamedGroupingPolicies("g", rolesToRemove)
+
+	// return a.RemoveRoleFromUser(sub, role, domain)
+}
+
 func (a *Auth) Enforce(sub string, domain string, act string) (result bool, err error) {
 	e := a.enforcer
 	var roleList []string
@@ -91,3 +124,19 @@ func (a *Auth) AddRoleToDomain(sub string, role string, domain string) (result b
 	}
 	return e.AddNamedGroupingPolicy("g", sub, role, domain)
 }
+
+func (a *Auth) AddRolesToDomain(sub string, roles []string, domain string) (result bool, err error) {
+	e := a.enforcer
+	rolesToAdd := [][]string{}
+	for k := range roles {
+		if _, ok := mapScope[roles[k]]; !ok {
+			return false, errors.New("Role not found in scope")
+		}
+		rolesToAdd = append(rolesToAdd, []string{sub, roles[k], domain})
+	}
+	return e.AddNamedGroupingPolicies("g", rolesToAdd)
+}
+
+// func (a *Auth) RemoveRoleFromUser(sub string, role string, domain string) (result bool, err error) {
+// 	e := a.enforcer
+// }

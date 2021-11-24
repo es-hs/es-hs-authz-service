@@ -24,16 +24,17 @@ import (
 	"log"
 	"time"
 
-	pb "authz-service/authz"
 	"authz-service/package/casbinhelper"
+
+	pb "github.com/es-hs/erpc/authz"
 
 	"google.golang.org/grpc"
 )
 
 const (
-	// address     = "localhost:50051"
+	address = "localhost:50051"
 	// address     = "3.0.95.112:50051"
-	address     = "authz.gempages.xyz:50051"
+	// address     = "authz.gempages.xyz:50051"
 	defaultName = "world"
 )
 
@@ -56,6 +57,16 @@ func main() {
 		Act:    casbinhelper.OWNER_ROLE,
 	})
 	log.Println("Result ", r.Result)
+	log.Println(time.Since(t1))
+	if err != nil {
+		log.Fatalf("could not greet: %v", err)
+	}
+	result, err := c.AddRolesForUserToDomain(ctx, &pb.AddRolesForUserToDomainRequest{
+		UserId: 2008,
+		ShopId: 2011,
+		Act:    []string{casbinhelper.ADMIN_ROLE, casbinhelper.PRODUCT_DELETE, casbinhelper.SECTION_DELETE},
+	})
+	log.Println("Result ", result.Result)
 	log.Println(time.Since(t1))
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
@@ -86,11 +97,67 @@ func main() {
 		ShopId: 2011,
 		Act:    casbinhelper.LOGIN_PERMISSION,
 	})
-	log.Println(r4)
+	log.Println(r4.Result)
 	log.Println(time.Since(t1))
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}
+
+	r7, err := c.RemoveRoleFromDomain(ctx, &pb.RemoveRoleFromDomainRequest{
+		UserId: 2008,
+		ShopId: 2011,
+		Act:    casbinhelper.OWNER_ROLE,
+	})
+	log.Println("Result ", r7.Result)
+	log.Println(time.Since(t1))
+	if err != nil {
+		log.Fatalf("could not greet: %v", err)
+	}
+
+	r8, err := c.RemoveRolesFromDomain(ctx, &pb.RemoveRolesFromDomainRequest{
+		UserId: 2008,
+		ShopId: 2011,
+		Act:    []string{casbinhelper.ADMIN_ROLE, casbinhelper.PRODUCT_DELETE, casbinhelper.SECTION_DELETE},
+	})
+	log.Println("Result ", r8.Result)
+	log.Println(time.Since(t1))
+	if err != nil {
+		log.Fatalf("could not greet: %v", err)
+	}
+	log.Println("after remove admin and product delete seciton delete role")
+	//SECOND TIME AFTER REMOVE ROLES
+	//check roles list
+	r2, err = c.GetRolesInDomain(ctx, &pb.GetRolesInDomainRequest{
+		UserId: 2008,
+		ShopId: 2011,
+	})
+	log.Println(r2.Roles)
+	log.Println(time.Since(t1))
+	if err != nil {
+		log.Fatalf("could not greet: %v", err)
+	}
+	//check roles detail list
+	r3, err = c.GetImplicitRolesInDomain(ctx, &pb.GetImplicitRolesInDomainRequest{
+		UserId: 2008,
+		ShopId: 2011,
+	})
+	log.Println(r3.Roles)
+	log.Println(time.Since(t1))
+	if err != nil {
+		log.Fatalf("could not greet: %v", err)
+	}
+	//check roles detail list
+	r4, err = c.CheckPermission(ctx, &pb.CheckPermissionRequest{
+		UserId: 2008,
+		ShopId: 2011,
+		Act:    casbinhelper.LOGIN_PERMISSION,
+	})
+	log.Println(r4.Result)
+	log.Println(time.Since(t1))
+	if err != nil {
+		log.Fatalf("could not greet: %v", err)
+	}
+	//
 	//gemerate role for
 	r5, err := c.GenerateOwnerRole(ctx, &pb.GenerateOwnerRoleRequest{
 		UserId: 2008,

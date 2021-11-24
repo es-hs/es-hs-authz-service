@@ -34,6 +34,18 @@ func (instance *AuthzUsecase) GenerateOwnerRole(userId uint, shopId uint) error 
 	return instance.authz.GenerateOwnerRole(userId, shopId)
 }
 
+func (instance *AuthzUsecase) AddRolesForUserToDomain(userId uint, roles []string, shopId uint) (bool, error) {
+	return instance.authz.AddRolesForUserToDomain(userId, roles, shopId)
+}
+
+func (instance *AuthzUsecase) RemoveRoleFromUser(userId uint, role string, shopId uint) (bool, error) {
+	return instance.authz.RemoveRoleFromUser(userId, role, shopId)
+}
+
+func (instance *AuthzUsecase) RemoveRolesFromUser(userId uint, roles []string, shopId uint) (bool, error) {
+	return instance.authz.RemoveRolesFromUser(userId, roles, shopId)
+}
+
 // func (instance *AuthzUsecase) GetRolesInDomain(userId uint, shopId uint) ([]string, error) {
 // 	return instance.authz.GetRoleList(userId, shopId)
 // }
