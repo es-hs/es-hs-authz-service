@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net"
 	"os"
+	"path"
+	"runtime"
 
 	configs "authz-service/configs"
 
@@ -13,12 +15,33 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
+	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 )
 
 var (
 	task = ""
 )
+
+func init() {
+	logrus.SetFormatter(&logrus.TextFormatter{
+		ForceColors: true,
+		CallerPrettyfier: func(f *runtime.Frame) (string, string) {
+			filename := path.Base(f.File)
+			return fmt.Sprintf("%s()\n", f.Function), fmt.Sprintf("%s:%d", filename, f.Line)
+		},
+	})
+	logrus.SetReportCaller(true)
+	logrus.SetOutput(os.Stdout)
+
+	if len(os.Args) > 1 {
+		readFlags()
+	}
+}
+
+func readFlags() {
+	flag.StringVar(&task, "task", "", "Task to run: server")
+}
 
 func main() {
 	// defer sentry.Flush(2 * time.Second)
@@ -39,10 +62,6 @@ func executeCommand() {
 	default:
 		fmt.Println("Unknow command:", task)
 	}
-}
-
-func readFlags() {
-
 }
 
 func runServer() {
