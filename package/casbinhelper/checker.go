@@ -137,6 +137,27 @@ func (a *Auth) AddRolesToDomain(sub string, roles []string, domain string) (resu
 	return e.AddNamedGroupingPolicies("g", rolesToAdd)
 }
 
+func (a *Auth) GetUsersForRoleInDomain(role string, shopID uint) (result []string) {
+	e := a.enforcer
+	domain := fmt.Sprintf("shop_%s", strconv.Itoa(int(shopID)))
+	return e.GetUsersForRoleInDomain(role, domain)
+}
+
+func (a *Auth) GetAllUsersByDomain(shopID uint) (result []string) {
+	e := a.enforcer
+	domain := fmt.Sprintf("shop_%s", strconv.Itoa(int(shopID)))
+	return e.GetAllUsersByDomain(domain)
+}
+
+func (a *Auth) DeleteDomains(shopIDs []uint) (result bool, err error) {
+	e := a.enforcer
+	var domains []string
+	for k := range shopIDs {
+		domains = append(domains, fmt.Sprintf("shop_%s", strconv.Itoa(int(shopIDs[k]))))
+	}
+	return e.DeleteDomains(domains...)
+}
+
 // func (a *Auth) RemoveRoleFromUser(sub string, role string, domain string) (result bool, err error) {
 // 	e := a.enforcer
 // }

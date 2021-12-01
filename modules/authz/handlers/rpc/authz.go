@@ -131,3 +131,34 @@ func (instance *AuthzRpcServer) RemoveRoleFromDomain(ctx context.Context, reques
 		Code:   0,
 	}, nil
 }
+
+func (instance *AuthzRpcServer) GetUsersForRoleInDomain(ctx context.Context, request *pb.GetUsersForRoleInDomainRequest) (*pb.GetUsersForRoleInDomainResult, error) {
+	role := request.GetRole()
+	shopID := request.GetShopId()
+	result := instance.usecase.GetUsersForRoleInDomain(role, uint(shopID))
+	return &pb.GetUsersForRoleInDomainResult{
+		Roles: result,
+		Code:  0,
+	}, nil
+}
+
+func (instance *AuthzRpcServer) GetAllUsersByDomain(ctx context.Context, request *pb.GetAllUsersByDomainRequest) (*pb.GetAllUsersByDomainResult, error) {
+	shopID := request.GetShopId()
+	result := instance.usecase.GetAllUsersByDomain(uint(shopID))
+	return &pb.GetAllUsersByDomainResult{
+		UserIds: result,
+		Code:    0,
+	}, nil
+}
+
+func (instance *AuthzRpcServer) DeleteDomains(ctx context.Context, request *pb.DeleteDomainsRequest) (*pb.DeleteDomainsResult, error) {
+	shopIds := request.GetShopIds()
+	result, err := instance.usecase.DeleteDomains(shopIds)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.DeleteDomainsResult{
+		Result: result,
+		Code:   0,
+	}, nil
+}

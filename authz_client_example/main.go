@@ -62,7 +62,17 @@ func main() {
 		log.Fatalf("could not greet: %v", err)
 	}
 	result, err := c.AddRolesForUserToDomain(ctx, &pb.AddRolesForUserToDomainRequest{
+		UserId: 2007,
+		ShopId: 2011,
+		Act:    []string{casbinhelper.ADMIN_ROLE, casbinhelper.PRODUCT_DELETE, casbinhelper.SECTION_DELETE},
+	})
+	result, _ = c.AddRolesForUserToDomain(ctx, &pb.AddRolesForUserToDomainRequest{
 		UserId: 2008,
+		ShopId: 2011,
+		Act:    []string{casbinhelper.ADMIN_ROLE, casbinhelper.PRODUCT_DELETE, casbinhelper.SECTION_DELETE},
+	})
+	result, _ = c.AddRolesForUserToDomain(ctx, &pb.AddRolesForUserToDomainRequest{
+		UserId: 2009,
 		ShopId: 2011,
 		Act:    []string{casbinhelper.ADMIN_ROLE, casbinhelper.PRODUCT_DELETE, casbinhelper.SECTION_DELETE},
 	})
@@ -98,6 +108,28 @@ func main() {
 		Act:    casbinhelper.LOGIN_PERMISSION,
 	})
 	log.Println(r4.Result)
+	log.Println(time.Since(t1))
+	if err != nil {
+		log.Fatalf("could not greet: %v", err)
+	}
+
+	log.Println("get all user in domain ")
+	r10, err := c.GetAllUsersByDomain(ctx, &pb.GetAllUsersByDomainRequest{
+		ShopId: 2011,
+	})
+	log.Println("Result ", r10.UserIds)
+	log.Println(time.Since(t1))
+	if err != nil {
+		log.Fatalf("could not greet: %v", err)
+	}
+
+	log.Println("get all user by roles in domain ")
+
+	r11, err := c.GetUsersForRoleInDomain(ctx, &pb.GetUsersForRoleInDomainRequest{
+		ShopId: 2011,
+		Role:   casbinhelper.ADMIN_ROLE,
+	})
+	log.Println("Result ", r11.Roles)
 	log.Println(time.Since(t1))
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
@@ -168,4 +200,31 @@ func main() {
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}
+
+	//remove domain
+	log.Println("let  remove domains 2011")
+	//SECOND TIME AFTER REMOVE ROLES
+	//check roles list
+	r12, err := c.DeleteDomains(ctx, &pb.DeleteDomainsRequest{
+		ShopIds: []int64{2011},
+	})
+	log.Println(r12.Result)
+	log.Println(time.Since(t1))
+	if err != nil {
+		log.Fatalf("could not greet: %v", err)
+	}
+	//
+	log.Println("after remove domains")
+	//SECOND TIME AFTER REMOVE ROLES
+	//check roles list
+	r2, err = c.GetRolesInDomain(ctx, &pb.GetRolesInDomainRequest{
+		UserId: 2008,
+		ShopId: 2011,
+	})
+	log.Println(r2.Roles)
+	log.Println(time.Since(t1))
+	if err != nil {
+		log.Fatalf("could not greet: %v", err)
+	}
+
 }
