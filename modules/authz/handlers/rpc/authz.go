@@ -137,8 +137,8 @@ func (instance *AuthzRpcServer) GetUsersForRoleInDomain(ctx context.Context, req
 	shopID := request.GetShopId()
 	result := instance.usecase.GetUsersForRoleInDomain(role, uint(shopID))
 	return &pb.GetUsersForRoleInDomainResult{
-		Roles: result,
-		Code:  0,
+		UserIds: result,
+		Code:    0,
 	}, nil
 }
 
