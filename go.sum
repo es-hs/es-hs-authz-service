@@ -40,6 +40,8 @@ github.com/es-hs/erpc v0.0.0-20211128193655-a43925f35658 h1:Y6S7zyCsYk/PafXn6tsg
 github.com/es-hs/erpc v0.0.0-20211128193655-a43925f35658/go.mod h1:KwYaQR6FjCUJ/VHSP0HqiaAySbl4A7b+j5NlAdhOuo0=
 github.com/es-hs/erpc v0.0.0-20211129033835-2e802500275c h1:Nh7ZvqYALa8YIVNQqvemVM9zRW+WZtcexwflAragdvc=
 github.com/es-hs/erpc v0.0.0-20211129033835-2e802500275c/go.mod h1:KwYaQR6FjCUJ/VHSP0HqiaAySbl4A7b+j5NlAdhOuo0=
+github.com/es-hs/erpc v0.0.0-20211202080435-8e1e5abdd386 h1:hSmtm7RqN1eaKoWx2ZKE+onKkhuNhIgRsEsvp5lgi/U=
+github.com/es-hs/erpc v0.0.0-20211202080435-8e1e5abdd386/go.mod h1:KwYaQR6FjCUJ/VHSP0HqiaAySbl4A7b+j5NlAdhOuo0=
 github.com/ghodss/yaml v1.0.0/go.mod h1:4dBDuWmgqj2HViK6kFavaiC9ZROes6MMH2rRYeMEF04=
 github.com/gin-contrib/sse v0.1.0 h1:Y/yl/+YNO8GZSjAhjMsSuLt29uWRFHdHYUb5lYOV9qE=
 github.com/gin-contrib/sse v0.1.0/go.mod h1:RHrZQHXnP2xjPF+u1gW/2HnVO7nvIa9PG3Gm+fLHvGI=

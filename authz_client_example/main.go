@@ -129,7 +129,7 @@ func main() {
 		ShopId: 2011,
 		Role:   casbinhelper.ADMIN_ROLE,
 	})
-	log.Println("Result ", r11.Roles)
+	log.Println("Result ", r11.UserIds)
 	log.Println(time.Since(t1))
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)

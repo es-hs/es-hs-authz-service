@@ -5,7 +5,7 @@ go 1.17
 require github.com/casbin/casbin/v2 v2.39.0
 
 require (
-	github.com/es-hs/erpc v0.0.0-20211129033835-2e802500275c // indirect
+	github.com/es-hs/erpc v0.0.0-20211202080435-8e1e5abdd386 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.13.0 // indirect
 	github.com/go-playground/universal-translator v0.17.0 // indirect
