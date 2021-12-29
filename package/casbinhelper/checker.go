@@ -12,25 +12,25 @@ type Auth struct {
 	enforcer *casbin.Enforcer
 }
 
-func (a *Auth) CheckPermission(userID uint, shopID uint, act string) (result bool, err error) {
+func (a *Auth) CheckPermission(userID uint64, shopID uint64, act string) (result bool, err error) {
 	sub := fmt.Sprintf("user_%s", strconv.Itoa(int(userID)))
 	domain := fmt.Sprintf("shop_%s", strconv.Itoa(int(shopID)))
 	return a.Enforce(sub, domain, act)
 }
 
-func (a *Auth) GetRoleList(userID uint, shopID uint) (roleList []string, err error) {
+func (a *Auth) GetRoleList(userID uint64, shopID uint64) (roleList []string, err error) {
 	sub := fmt.Sprintf("user_%s", strconv.Itoa(int(userID)))
 	domain := fmt.Sprintf("shop_%s", strconv.Itoa(int(shopID)))
 	return a.GetRolesForUser(sub, domain)
 }
 
-func (a *Auth) GetDetailRoleList(userID uint, shopID uint) (roleList []string, err error) {
+func (a *Auth) GetDetailRoleList(userID uint64, shopID uint64) (roleList []string, err error) {
 	sub := fmt.Sprintf("user_%s", strconv.Itoa(int(userID)))
 	domain := fmt.Sprintf("shop_%s", strconv.Itoa(int(shopID)))
 	return a.GetImplicitRolesForUser(sub, domain)
 }
 
-func (a *Auth) GenerateOwnerRole(userID uint, shopID uint) (err error) {
+func (a *Auth) GenerateOwnerRole(userID uint64, shopID uint64) (err error) {
 	sub := fmt.Sprintf("user_%s", strconv.Itoa(int(userID)))
 	domain := fmt.Sprintf("shop_%s", strconv.Itoa(int(shopID)))
 	a.AddRoleToDomain(sub, OWNER_ROLE, domain)
@@ -44,19 +44,19 @@ func (a *Auth) GenerateOwnerRole(userID uint, shopID uint) (err error) {
 	return nil
 }
 
-func (a *Auth) AddRoleForUserToDomain(userID uint, role string, shopID uint) (result bool, err error) {
+func (a *Auth) AddRoleForUserToDomain(userID uint64, role string, shopID uint64) (result bool, err error) {
 	sub := fmt.Sprintf("user_%s", strconv.Itoa(int(userID)))
 	domain := fmt.Sprintf("shop_%s", strconv.Itoa(int(shopID)))
 	return a.AddRoleToDomain(sub, role, domain)
 }
 
-func (a *Auth) AddRolesForUserToDomain(userID uint, roles []string, shopID uint) (result bool, err error) {
+func (a *Auth) AddRolesForUserToDomain(userID uint64, roles []string, shopID uint64) (result bool, err error) {
 	sub := fmt.Sprintf("user_%s", strconv.Itoa(int(userID)))
 	domain := fmt.Sprintf("shop_%s", strconv.Itoa(int(shopID)))
 	return a.AddRolesToDomain(sub, roles, domain)
 }
 
-func (a *Auth) RemoveRoleFromUser(userID uint, role string, shopID uint) (result bool, err error) {
+func (a *Auth) RemoveRoleFromUser(userID uint64, role string, shopID uint64) (result bool, err error) {
 	sub := fmt.Sprintf("user_%s", strconv.Itoa(int(userID)))
 	domain := fmt.Sprintf("shop_%s", strconv.Itoa(int(shopID)))
 	//
@@ -66,7 +66,7 @@ func (a *Auth) RemoveRoleFromUser(userID uint, role string, shopID uint) (result
 	// return a.RemoveRoleFromUser(sub, role, domain)
 }
 
-func (a *Auth) RemoveRolesFromUser(userID uint, roles []string, shopID uint) (result bool, err error) {
+func (a *Auth) RemoveRolesFromUser(userID uint64, roles []string, shopID uint64) (result bool, err error) {
 	sub := fmt.Sprintf("user_%s", strconv.Itoa(int(userID)))
 	domain := fmt.Sprintf("shop_%s", strconv.Itoa(int(shopID)))
 	//
@@ -137,19 +137,19 @@ func (a *Auth) AddRolesToDomain(sub string, roles []string, domain string) (resu
 	return e.AddNamedGroupingPolicies("g", rolesToAdd)
 }
 
-func (a *Auth) GetUsersForRoleInDomain(role string, shopID uint) (result []string) {
+func (a *Auth) GetUsersForRoleInDomain(role string, shopID uint64) (result []string) {
 	e := a.enforcer
 	domain := fmt.Sprintf("shop_%s", strconv.Itoa(int(shopID)))
 	return e.GetUsersForRoleInDomain(role, domain)
 }
 
-func (a *Auth) GetAllUsersByDomain(shopID uint) (result []string) {
+func (a *Auth) GetAllUsersByDomain(shopID uint64) (result []string) {
 	e := a.enforcer
 	domain := fmt.Sprintf("shop_%s", strconv.Itoa(int(shopID)))
 	return e.GetAllUsersByDomain(domain)
 }
 
-func (a *Auth) DeleteDomains(shopIDs []uint) (result bool, err error) {
+func (a *Auth) DeleteDomains(shopIDs []uint64) (result bool, err error) {
 	e := a.enforcer
 	var domains []string
 	for k := range shopIDs {

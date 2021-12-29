@@ -45,7 +45,7 @@ func main() {
 		log.Fatalf("did not connect: %v", err)
 	}
 	defer conn.Close()
-	c := pb.NewAuthzRPCClient(conn)
+	c := pb.NewAuthzClient(conn)
 
 	// Contact the server and print out its response.
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
@@ -206,7 +206,7 @@ func main() {
 	//SECOND TIME AFTER REMOVE ROLES
 	//check roles list
 	r12, err := c.DeleteDomains(ctx, &pb.DeleteDomainsRequest{
-		ShopIds: []int64{2011},
+		ShopIds: []uint64{2011},
 	})
 	log.Println(r12.Result)
 	log.Println(time.Since(t1))

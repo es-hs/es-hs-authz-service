@@ -11,12 +11,12 @@ import (
 )
 
 type AuthzRpcServer struct {
-	pb.UnimplementedAuthzRPCServer
+	pb.UnimplementedAuthzServer
 	usecase usecases.AuthzUsecase
 }
 
 func RegisterServer(server *grpc.Server, authz casbinhelper.Auth) {
-	pb.RegisterAuthzRPCServer(server, &AuthzRpcServer{
+	pb.RegisterAuthzServer(server, &AuthzRpcServer{
 		usecase: usecases.NewAuthzUsecase(authz),
 	})
 }
@@ -25,7 +25,7 @@ func (instance *AuthzRpcServer) AddRoleToDomain(ctx context.Context, request *pb
 	userID := request.GetUserId()
 	shopID := request.GetShopId()
 	act := request.GetAct()
-	result, err := instance.usecase.AddRoleForUserToDomain(uint(userID), uint(shopID), act)
+	result, err := instance.usecase.AddRoleForUserToDomain(userID, shopID, act)
 	if err != nil {
 		return nil, err
 	}
@@ -39,7 +39,7 @@ func (instance *AuthzRpcServer) CheckPermission(ctx context.Context, request *pb
 	userID := request.GetUserId()
 	shopID := request.GetShopId()
 	act := request.GetAct()
-	result, err := instance.usecase.CheckPermission(uint(userID), uint(shopID), act)
+	result, err := instance.usecase.CheckPermission(userID, shopID, act)
 	if err != nil {
 		return nil, err
 	}
@@ -52,7 +52,7 @@ func (instance *AuthzRpcServer) CheckPermission(ctx context.Context, request *pb
 func (instance *AuthzRpcServer) GetRolesInDomain(ctx context.Context, request *pb.GetRolesInDomainRequest) (*pb.GetRolesInDomainResult, error) {
 	userID := request.GetUserId()
 	shopID := request.GetShopId()
-	result, err := instance.usecase.GetRolesInDomain(uint(userID), uint(shopID))
+	result, err := instance.usecase.GetRolesInDomain(userID, shopID)
 	if err != nil {
 		return nil, err
 	}
@@ -65,7 +65,7 @@ func (instance *AuthzRpcServer) GetRolesInDomain(ctx context.Context, request *p
 func (instance *AuthzRpcServer) GetImplicitRolesInDomain(ctx context.Context, request *pb.GetImplicitRolesInDomainRequest) (*pb.GetImplicitRolesInDomainResult, error) {
 	userID := request.GetUserId()
 	shopID := request.GetShopId()
-	result, err := instance.usecase.GetImplicitRolesInDomain(uint(userID), uint(shopID))
+	result, err := instance.usecase.GetImplicitRolesInDomain(userID, shopID)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +79,7 @@ func (instance *AuthzRpcServer) GetImplicitRolesInDomain(ctx context.Context, re
 func (instance *AuthzRpcServer) GenerateOwnerRole(ctx context.Context, request *pb.GenerateOwnerRoleRequest) (*pb.GenerateOwnerRoleResult, error) {
 	userID := request.GetUserId()
 	shopID := request.GetShopId()
-	err := instance.usecase.GenerateOwnerRole(uint(userID), uint(shopID))
+	err := instance.usecase.GenerateOwnerRole(userID, shopID)
 	if err != nil {
 		return nil, err
 	}
@@ -93,7 +93,7 @@ func (instance *AuthzRpcServer) AddRolesForUserToDomain(ctx context.Context, req
 	userID := request.GetUserId()
 	shopID := request.GetShopId()
 	roles := request.GetAct()
-	result, err := instance.usecase.AddRolesForUserToDomain(uint(userID), roles, uint(shopID))
+	result, err := instance.usecase.AddRolesForUserToDomain(userID, roles, shopID)
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +108,7 @@ func (instance *AuthzRpcServer) RemoveRolesFromDomain(ctx context.Context, reque
 	userID := request.GetUserId()
 	shopID := request.GetShopId()
 	roles := request.GetAct()
-	result, err := instance.usecase.RemoveRolesFromUser(uint(userID), roles, uint(shopID))
+	result, err := instance.usecase.RemoveRolesFromUser(userID, roles, shopID)
 	if err != nil {
 		return nil, err
 	}
@@ -122,7 +122,7 @@ func (instance *AuthzRpcServer) RemoveRoleFromDomain(ctx context.Context, reques
 	userID := request.GetUserId()
 	shopID := request.GetShopId()
 	role := request.GetAct()
-	result, err := instance.usecase.RemoveRoleFromUser(uint(userID), role, uint(shopID))
+	result, err := instance.usecase.RemoveRoleFromUser(userID, role, shopID)
 	if err != nil {
 		return nil, err
 	}
@@ -135,7 +135,7 @@ func (instance *AuthzRpcServer) RemoveRoleFromDomain(ctx context.Context, reques
 func (instance *AuthzRpcServer) GetUsersForRoleInDomain(ctx context.Context, request *pb.GetUsersForRoleInDomainRequest) (*pb.GetUsersForRoleInDomainResult, error) {
 	role := request.GetRole()
 	shopID := request.GetShopId()
-	result := instance.usecase.GetUsersForRoleInDomain(role, uint(shopID))
+	result := instance.usecase.GetUsersForRoleInDomain(role, shopID)
 	return &pb.GetUsersForRoleInDomainResult{
 		UserIds: result,
 		Code:    0,
@@ -144,7 +144,7 @@ func (instance *AuthzRpcServer) GetUsersForRoleInDomain(ctx context.Context, req
 
 func (instance *AuthzRpcServer) GetAllUsersByDomain(ctx context.Context, request *pb.GetAllUsersByDomainRequest) (*pb.GetAllUsersByDomainResult, error) {
 	shopID := request.GetShopId()
-	result := instance.usecase.GetAllUsersByDomain(uint(shopID))
+	result := instance.usecase.GetAllUsersByDomain(shopID)
 	return &pb.GetAllUsersByDomainResult{
 		UserIds: result,
 		Code:    0,
