@@ -31,4 +31,5 @@ volumes:
 
 networks:
   default:
-    name: es-hs
+    external:
+      name: es-hs
